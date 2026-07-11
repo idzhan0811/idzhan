@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高考祝福</title>
+    <style>
+body{
+        background: linear-gradient(135deg, #ffc3d7, #f8c8ff, #bfeaff, #ffd6e0);
+             min-height:100vh;
+             font-family:'微软雅黑',sans-serif;
+             overflow-x:hidden;
+             text-align:center;
+             padding-top:60px;
+         }
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ffeaf0, #ffd6e4);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 100;
+        }
+        .popup h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .popup p {
+            margin: 10px 0;
+            color: #666;
+           font-size:13px;
+        }
+        .popup button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .note {
+            position: absolute;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in;
+            cursor: pointer;
+            font-size:16px;
+        }
+        .note:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+     
+    </style>
+</head>
+<body>
+    <div class="popup" id="giftPopup">
+        <h3>礼物</h3>
+        <p> 您收到一份高考祝福，请问是否打开？</p>
+        <button id="openGift">确定</button>
+    </div>
+<script>
+    const notes = [
+        "新的一岁，愿你三餐四季温柔有趣，平安喜乐万事胜意！",
+"生日快乐！愿你眼里有光、心中有海，活成自己喜欢的模样。",
+"愿你往后的每一岁，都奔走在热爱里，永远鲜活、永远被爱。",
+"生日快乐！把烦恼丢在昨天，把快乐揣进今天，新的一岁全是好运与惊喜。",
+"愿你永远有敢爱敢恨的勇气，和说走就走的底气，生日这天只管尽情开心。",
+"新的一岁，愿你想要的都得到，没说出口的惊喜也全奔你而来。",
+"生日快乐！愿你被这个世界温柔以待，所有美好环绕在你身边。",
+"愿你往后的日子，烟火向星辰、所愿皆成真，每一步都走在自己的热爱里。",
+"新的一岁，不慌不忙、自带光芒，想要的都拥有，得不到的都释怀。",
+"愿你永远有做小孩的天真，也有扛事的成熟，生日这天只管被爱包围。",
+"生日快乐！把过往的遗憾都变成惊喜的铺垫，新的一岁全是坦途与好运。",
+"愿你三餐四季皆有暖意，朝朝暮暮都有欢喜，生日快乐不止今天。",
+"新的一岁，愿你眼里的世界永远新鲜，身边的情谊永远滚烫。",
+"生日快乐！愿你往后风雨皆有伞，雨夜总有灯，所行之路皆为坦途。",
+"愿你永远保持对生活的热爱，愿所有美好如约而至，新的一岁更要闪闪发光。",
+"新的一岁，愿你想要的都拥有，得不到的都释怀，被世界温柔相拥。",
+"生日快乐！愿你永远兴致盎然地和世界交手，一直走在充满鲜花的路上。",
+"愿你往后的每一步都走在自己的热爱里，眼里有光、心中有梦，生日喜乐。",
+"新的一岁，愿你平安顺遂、万事胜意，想要的都在赶来的路上。",
+"生日快乐！愿你永远被爱包裹，永远有做自己的勇气，新的一岁全是惊喜。",
+"愿你往后的日子，活成自己喜欢的模样，不将就、不迎合，自由又自在。"
+    ];
+
+    const colors = [
+        "#e6f7f0",
+        "#fce6e0",
+        "#f0e6f7",
+        "#e0f0f7",
+        "#f7f0e0",
+        "#fff2cc",
+        "#e8f4ff",
+        "#ffeef8",
+        "#f5ffe8",
+        "#fff7e6",
+        "#e9e5ff",
+        "#ffe6ec"
+    ];
+
+
+        document.getElementById("openGift").addEventListener("click", function() {
+            document.getElementById("giftPopup").style.display = "none";
+            setInterval(createNote, 80);
+        });
+
+        function createNote() {
+            const note = document.createElement("div");
+            note.className = "note";
+            note.textContent = notes[Math.floor(Math.random() * notes.length)];
+            note.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            note.style.left = Math.random() * (window.innerWidth - 100) + "px";
+            note.style.top = Math.random() * (window.innerHeight - 50) + "px";
+            note.style.width = "135px";
+            document.body.appendChild(note);
+
+            // 一段时间后移除元素
+            setTimeout(function() {
+                note.style.opacity = "0";
+                note.style.transition = "opacity 0.5s ease";
+                setTimeout(function() {
+                    document.body.removeChild(note);
+                }, 500);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

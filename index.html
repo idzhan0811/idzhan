@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人网站</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            cursor:default;
+        }
+        body{
+            background:linear-gradient(to right,#ffecd2,#fcb69f);
+            min-height:100vh;
+            font-family:'微软雅黑',sans-serif;
+            overflow-x:hidden;
+            text-align:center;
+            padding-top:60px;
+        }
+        .box{
+            background:white;
+            width:90%;
+            max-width:400px;
+            margin:30px auto;
+            padding:30px;
+            border-radius:20px;
+            box-shadow:0 0 20px rgba(0,0,0,0.1);
+            animation:fade 1s ease;
+        }
+        @keyframes fade{
+            from{opacity:0;transform:translateY(30px);}
+            to{opacity:1;transform:translateY(0);}
+        }
+        h1{
+            color:#ff5e99;
+            font-size:20px;
+            margin-bottom:10px;
+        }
+        p{
+            color:#666;
+            font-size:16px;
+            line-height:1.6;
+        }
+        .btn{
+            margin-top:20px;
+            padding:12px 25px;
+            background:#ff8fab;
+            color:white;
+            border:none;
+            border-radius:30px;
+            font-size:16px;
+            transition:.3s;
+        }
+        .btn:hover{
+            background:#ff5e99;
+            transform:scale(1.05);
+        }
+        .heart{
+            position:fixed;
+            color:#ff5e99;
+            font-size:20px;
+            pointer-events:none;
+            animation:fly 1s linear forwards;
+        }
+        @keyframes fly{
+            to{transform:translateY(-60px);opacity:0;}
+        }
+        .bubble{
+            position:fixed;
+            width:8px;
+            height:8px;
+            background:rgba(255,255,255,0.8);
+            border-radius:50%;
+            pointer-events:none;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>✨ 欢迎来到我的个人网站</h1>
+        <p>随便点一点屏幕<br>看看会发生什么～</p>
+       <a href="daohang.html"><button class="btn" onclick="sayHi()">点击进入</button></a>
+    <p style="font-size:5px;text-align:left;">作者:申*</p>
+    </div>
+
+    <script>
+        document.addEventListener('click',function(e){
+            let h=document.createElement('div')
+            h.className='heart'
+            h.innerHTML='❤'
+            h.style.left=e.pageX-10+'px'
+            h.style.top=e.pageY-10+'px'
+            document.body.appendChild(h)
+            setTimeout(()=>h.remove(),1000)
+        })
+
+        document.addEventListener('mousemove',function(e){
+            let b=document.createElement('div')
+            b.className='bubble'
+            b.style.left=e.pageX+'px'
+            b.style.top=e.pageY+'px'
+            document.body.appendChild(b)
+            setTimeout(()=>b.remove(),600)
+        })
+
+      /* function sayHi(){
+            alert('💗 你超可爱 超值得被爱')
+        }*/
+    </script>
+<!--1.统计JS引入放在body末尾、</body>前面-->
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--2.数字显示标签，想放底部就放这里-->
+<div style="font-size:12px;color:#999;text-align:center;padding:10px;">
+本站总访问：<span id="busuanzi_value_site_pv"></span> 次｜访客：<span id="busuanzi_value_site_uv"></span> 人
+</div>
+
+</body>
+</body>
+</html>
