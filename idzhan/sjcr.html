@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>随机抽签工具</title>
+  <style>
+    :root {
+      --bg: #7d37ed;
+      --card: #ffffff;
+      --text: #222;
+      --inputbg: #fff;
+      --resbg: #f0f7ff;
+      --btn-primary: #2563eb;
+      --btn-danger: #ef4444;
+      --btn-green: #089d6c;
+      --btn-purple: #7c3aed;
+    }
+    .dark {
+      --bg: #1e293b;
+      --card: #2a374d;
+      --text: #eee;
+      --inputbg: #334155;
+      --resbg: #334155;
+      --btn-primary: #3b82f6;
+      --btn-danger: #f87171;
+      --btn-green: #34d399;
+      --btn-purple: #a78bfa;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+      padding: 30px 20px;
+      transition: background 0.3s ease;
+    }
+    .wrap {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    h1 {
+      color: var(--text);
+      font-size: 20px;
+    }
+    .item-box {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    textarea {
+      width: 100%;
+      height: 160px;
+      padding: 12px;
+      border: 1px solid #9995;
+      border-radius: 8px;
+      font-size: 15px;
+      resize: none;
+      background: var(--inputbg);
+      color: var(--text);
+      outline: none;
+    }
+    .oper-row {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .num-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    #pickNum {
+      width: 70px;
+      padding: 6px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+      background: var(--inputbg);
+      color: var(--text);
+      outline: none;
+    }
+    .result {
+      padding: 25px;
+      background: var(--resbg);
+      border-radius: 10px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--btn-primary);
+      margin: 25px 0;
+      min-height: 90px;
+      line-height: 1.5;
+      transition: all 0.2s;
+    }
+    @keyframes rollAnim {
+      0%   { opacity: 0.4; transform: scale(0.95); }
+      50%  { opacity: 1;   transform: scale(1.03); }
+      100% { opacity: 0.4; transform: scale(0.95); }
+    }
+    .rolling {
+      animation: rollAnim 0.12s infinite;
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    button, .file-btn {
+      flex: 1;
+      min-width: 110px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #fff;
+      text-align: center;
+    }
+    #startBtn  { background: var(--btn-primary); }
+    #clearBtn  { background: var(--btn-danger);  }
+    .file-btn  { background: var(--btn-green);   }
+    #themeBtn {
+      flex: unset;
+      min-width: unset;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+    #themeBtn:hover {
+      filter: brightness(1.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px #8b5cf655;
+    }
+    #themeBtn:active {
+      transform: translateY(0);
+    }
+    input[type="file"] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top-bar">
+      <h1>随机抽签工具</h1>
+      <button id="themeBtn">☀/☾</button>
+    </div>
+
+    <div class="item-box">
+      <label>人员名单（一行一个姓名）：</label>
+      <textarea id="nameList" placeholder="张三
+李四
+王五
+赵六"></textarea>
+      <div class="oper-row">
+        <label class="file-btn" for="fileInput">导入TXT文件</label>
+        <input id="fileInput" type="file" accept=".txt">
+        <button id="saveTxt" class="file-btn">导出名单为TXT</button>
+      </div>
+    </div>
+
+    <div class="num-box">
+      <span>抽取人数：</span>
+      <input type="number" min="1" value="1" id="pickNum">
+      <span>人（不可大于总人数）</span>
+    </div>
+
+    <div class="result" id="showRes">等待抽签...</div>
+
+    <div class="btn-group">
+      <button id="startBtn">开始抽奖</button>
+      <button id="clearBtn">清空结果</button>
+    </div>
+  </div>
+
+  <script>
+    const listDom    = document.getElementById('nameList');
+    const resDom     = document.getElementById('showRes');
+    const startBtn   = document.getElementById('startBtn');
+    const clearBtn   = document.getElementById('clearBtn');
+    const pickNum    = document.getElementById('pickNum');
+    const fileInput  = document.getElementById('fileInput');
+    const saveTxtBtn = document.getElementById('saveTxt');
+    const themeBtn   = document.getElementById('themeBtn');
+
+    let isRoll    = false;
+    let rollTimer = null;
+    const ROLL_TIME = 1500;
+    const ROLL_SPEED = 80;
+
+    // 主题切换
+    themeBtn.onclick = () => {
+      document.body.classList.toggle('dark');
+    };
+
+    // 导入TXT
+    fileInput.onchange = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = ev => {
+        listDom.value = ev.target.result;
+        alert('TXT导入成功！');
+      };
+    };
+
+    // 导出TXT
+    saveTxtBtn.onclick = () => {
+      const content = listDom.value.trim();
+      if (!content) {
+        alert('名单内容为空，无法导出！');
+        return;
+      }
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = '抽签名单.txt';
+      a.click();
+      alert('名单TXT文件已开始下载！');
+    };
+
+    // 开始抽奖
+    startBtn.onclick = async function() {
+      if (isRoll) return;
+
+      let rawArr = listDom.value.split('\n')
+        .map(item => item.trim())
+        .filter(item => item !== '');
+      let needPickCount = Number(pickNum.value);
+
+      if (rawArr.length === 0) {
+        resDom.innerText = '请填写或导入人员名单！';
+        return;
+      }
+      if (needPickCount < 1 || isNaN(needPickCount)) {
+        resDom.innerText = '抽取人数不能小于1！';
+        return;
+      }
+      if (needPickCount > rawArr.length) {
+        resDom.innerText = `最多只能抽取${rawArr.length}人`;
+        return;
+      }
+
+      // 滚动动画
+      isRoll = true;
+      resDom.classList.add('rolling');
+      rollTimer = setInterval(() => {
+        let randomIndex = Math.floor(Math.random() * rawArr.length);
+        resDom.innerText = rawArr[randomIndex];
+      }, ROLL_SPEED);
+
+      await new Promise(resolve => setTimeout(resolve, ROLL_TIME));
+
+      clearInterval(rollTimer);
+      rollTimer = null;
+      resDom.classList.remove('rolling');
+      isRoll = false;
+
+      // 不重复抽取
+      let resultArr = [];
+      let tempNameList = [...rawArr];
+      for (let i = 0; i < needPickCount; i++) {
+        let idx = Math.floor(Math.random() * tempNameList.length);
+        resultArr.push(tempNameList.splice(idx, 1)[0]);
+      }
+      resDom.innerText = resultArr.join('、');
+    };
+
+    // 清空
+    clearBtn.onclick = function() {
+      if (rollTimer) {
+        clearInterval(rollTimer);
+        rollTimer = null;
+      }
+      isRoll = false;
+      resDom.classList.remove('rolling');
+      resDom.innerText = '等待抽签...';
+    };
+  </script>
+</body>
+</html>

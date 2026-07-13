@@ -1,0 +1,14 @@
+{
+  "name": "message-board",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@netlify/database": "^1.0.0",
+    "drizzle-orm": "^0.36.0"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^2.0.0",
+    "drizzle-kit": "^0.28.0",
+    "typescript": "^5.0.0"
+  }
+}
